@@ -15,11 +15,11 @@ const (
 
 // Stack represents a stack of elements.
 type Stack interface {
-	// Pop method must pop the top element out of the stack and return it. In
-	// case of an empty stack ok should be false, else true.
+	// Pop must pop the top element out of the stack and return it. In case of
+	// an empty stack ok should be false, else true.
 	Pop() (ele interface{}, ok bool)
-	// Push method must insert an element in the stack. Since ele is of interface
-	// type, type assertion must be done before inserting element in the stack.
+	// Push must insert an element in the stack. Since ele is of interface type,
+	// type assertion must be done before inserting element in the stack.
 	Push(ele interface{})
 }
 

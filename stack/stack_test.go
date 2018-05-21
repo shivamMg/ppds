@@ -31,7 +31,7 @@ func (s *MyStack) Push(ele interface{}) {
 	s.push(ele.(int))
 }
 
-func TestPrint(t *testing.T) {
+func TestSprint(t *testing.T) {
 	s := MyStack{}
 	s.push(10)
 	s.push(199)
