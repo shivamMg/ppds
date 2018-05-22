@@ -3,10 +3,16 @@ package list
 import (
   "fmt"
   "reflect"
+  "strings"
 )
 
 const (
 	BoxVer     = "│"
+	BoxHor     = "─"
+  BoxDownRight = "┌"
+  BoxDownLeft = "┐"
+	BoxUpRight = "└"
+	BoxUpLeft  = "┘"
   BoxVerRight = "├"
   BoxVerLeft = "┤"
 )
@@ -29,10 +35,47 @@ func Sprint(head Node) (s string) {
     head = head.Next()
   }
 
+  maxDigitWidth := digitWidth(len(data))
+  for i := 0; i < len(w); i++ {
+    if w[i] < maxDigitWidth {
+      w[i] = maxDigitWidth
+    }
+  }
+
+  for i := 0; i < len(w); i++ {
+    s += BoxDownRight + strings.Repeat(BoxHor, w[i]) + BoxDownLeft
+  }
+  s += "\n"
+
   s += BoxVer
   for i := 0; i < len(data)-1;i++ {
-    s +=  data[i] + BoxVerRight + BoxVerLeft
+    s +=  fmt.Sprintf("%*s", w[i], data[i]) + BoxVerRight + BoxVerLeft
   }
-  s += data[len(data)-1] + BoxVer
+  s += fmt.Sprintf("%*s", w[len(w)-1], data[len(data)-1]) + BoxVer + "\n"
+
+  for i := 0; i < len(w); i++ {
+    s += BoxVerRight + strings.Repeat(BoxHor, w[i]) + BoxVerLeft
+  }
+  s += "\n"
+
+  s += BoxVer
+  for i := 0; i < len(w)-1; i++ {
+    s += fmt.Sprintf("%*d", w[i], i+1) + BoxVer + BoxVer
+  }
+  s += fmt.Sprintf("%*d", w[len(w)-1], len(w)) + BoxVer + "\n"
+
+  for i := 0; i < len(w); i++ {
+    s += BoxUpRight + strings.Repeat(BoxHor, w[i]) + BoxUpLeft
+  }
+  s += "\n"
+
   return
+}
+
+func digitWidth(d int) (w int) {
+	for d != 0 {
+		d = d / 10
+		w++
+	}
+	return
 }

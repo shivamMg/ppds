@@ -20,8 +20,17 @@ func (n Node) Next() list.Node {
 }
 
 func TestPrint(t *testing.T) {
-  n1 := Node{10, nil}
-  n2 := Node{11, &n1}
-  n3 := Node{13, &n2}
-  list.Print(&n3)
+  n1 := Node{935, nil}
+  n2 := Node{-10324, &n1}
+  n3 := Node{3000000, &n2}
+  want := `┌───────┐┌──────┐┌───┐
+│3000000├┤-10324├┤935│
+├───────┤├──────┤├───┤
+│      1││     2││  3│
+└───────┘└──────┘└───┘
+`
+  got := list.Sprint(&n3)
+  if want != got {
+    t.Errorf("Expected: %s\nGot: %s\n", want, got)
+  }
 }
