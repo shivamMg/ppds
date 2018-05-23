@@ -8,9 +8,9 @@ import (
 const (
 	BoxVer     = "│"
 	BoxHor     = "─"
-	BoxUpRight = "└"
-	BoxUpLeft  = "┘"
 	BoxUpHor   = "┴"
+	BoxUpLeft  = "┘"
+	BoxUpRight = "└"
 )
 
 // Stack represents a stack of elements.

@@ -1,75 +1,89 @@
 package list
 
 import (
-  "fmt"
-  "reflect"
-  "strings"
+	"fmt"
+	"reflect"
+	"strings"
 )
 
 const (
-	BoxVer     = "│"
-	BoxHor     = "─"
-  BoxDownRight = "┌"
-  BoxDownLeft = "┐"
-	BoxUpRight = "└"
-	BoxUpLeft  = "┘"
-  BoxVerRight = "├"
-  BoxVerLeft = "┤"
+	BoxVer       = "│"
+	BoxHor       = "─"
+	BoxDownLeft  = "┐"
+	BoxDownRight = "┌"
+	BoxUpLeft    = "┘"
+	BoxUpRight   = "└"
+	BoxVerLeft   = "┤"
+	BoxVerRight  = "├"
 )
 
+// Node represents a linked list node.
 type Node interface {
-  Data() string
-  Next() Node
+	// Data must return a string representing the value contained by the node.
+	Data() string
+	// Next must return the address of the next node. To mark the end of the list
+	// return the zero value of the type.
+	Next() Node
 }
 
+// Print prints the formatted linked list to standard output.
 func Print(head Node) {
-  fmt.Println(Sprint(head))
+	fmt.Println(Sprint(head))
 }
 
+// Sprint returns the formatted linked list.
 func Sprint(head Node) (s string) {
-  // w stores data widths
-  data, w := []string{}, []int{}
-  for reflect.ValueOf(head) != reflect.Zero(reflect.TypeOf(head)) {
-    data = append(data, head.Data())
-    w = append(w, len(head.Data()))
-    head = head.Next()
-  }
+	data := []string{}
+	for reflect.ValueOf(head) != reflect.Zero(reflect.TypeOf(head)) {
+		data = append(data, head.Data())
+		head = head.Next()
+	}
 
-  maxDigitWidth := digitWidth(len(data))
-  for i := 0; i < len(w); i++ {
-    if w[i] < maxDigitWidth {
-      w[i] = maxDigitWidth
-    }
-  }
+	widths, maxDigitWidth := []int{}, digitWidth(len(data))
+	for _, d := range data {
+		if len(d) > maxDigitWidth {
+			widths = append(widths, len(d))
+		} else {
+			widths = append(widths, maxDigitWidth)
+		}
+	}
 
-  for i := 0; i < len(w); i++ {
-    s += BoxDownRight + strings.Repeat(BoxHor, w[i]) + BoxDownLeft
-  }
-  s += "\n"
+	for _, w := range widths {
+		s += BoxDownRight + strings.Repeat(BoxHor, w) + BoxDownLeft
+	}
+	s += "\n"
 
-  s += BoxVer
-  for i := 0; i < len(data)-1;i++ {
-    s +=  fmt.Sprintf("%*s", w[i], data[i]) + BoxVerRight + BoxVerLeft
-  }
-  s += fmt.Sprintf("%*s", w[len(w)-1], data[len(data)-1]) + BoxVer + "\n"
+	s += BoxVer
+	for i, d := range data {
+		s += fmt.Sprintf("%*s", widths[i], d)
+		if i == len(data)-1 {
+			s += BoxVer + "\n"
+		} else {
+			s += BoxVerRight + BoxVerLeft
+		}
+	}
 
-  for i := 0; i < len(w); i++ {
-    s += BoxVerRight + strings.Repeat(BoxHor, w[i]) + BoxVerLeft
-  }
-  s += "\n"
+	for _, w := range widths {
+		s += BoxVerRight + strings.Repeat(BoxHor, w) + BoxVerLeft
+	}
+	s += "\n"
 
-  s += BoxVer
-  for i := 0; i < len(w)-1; i++ {
-    s += fmt.Sprintf("%*d", w[i], i+1) + BoxVer + BoxVer
-  }
-  s += fmt.Sprintf("%*d", w[len(w)-1], len(w)) + BoxVer + "\n"
+	s += BoxVer
+	for i, w := range widths {
+		s += fmt.Sprintf("%*d", w, i+1)
+		if i == len(widths)-1 {
+			s += BoxVer + "\n"
+		} else {
+			s += BoxVer + BoxVer
+		}
+	}
 
-  for i := 0; i < len(w); i++ {
-    s += BoxUpRight + strings.Repeat(BoxHor, w[i]) + BoxUpLeft
-  }
-  s += "\n"
+	for _, w := range widths {
+		s += BoxUpRight + strings.Repeat(BoxHor, w) + BoxUpLeft
+	}
+	s += "\n"
 
-  return
+	return
 }
 
 func digitWidth(d int) (w int) {
