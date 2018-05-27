@@ -47,44 +47,83 @@ func main() {
 	parents := map[*Node]*Node{}
 	getParents(parents, &n11)
 
+	leftMostBranch := getLeftMostBranch(&n11)
+
 	q := queue{}
 	q.push(&n11)
-	pop := 1
+	qLen := 1
 	for !q.empty() {
-		nextPop := 0
-		var prev *Node
-		covered := 0
-		for i := 0; i < pop; i++ {
+		var prevNode *Node
+		pushed := 0
+		for i := 0; i < qLen; i++ {
 			n := q.pop()
-			spaces := 0
-			if prev != nil {
-				a, _, c2 := commonAncestor(parents, prev, n)
-				// fmt.Println("ancestor", a.data, c1.data, c2.data)
-				total := 0
-				for _, c := range a.c {
+			for _, c := range n.c {
+				pushed++
+				q.push(c)
+			}
+
+			if isLeftMostChild(parents, n) {
+				if i == 0 {
+					fmt.Print(n.data)
+					prevNode = n
+					continue
+				}
+				anc, _, c2 := commonAncestor(parents, prevNode, n)
+				leftPad := 0
+				for _, c := range anc.c {
 					if c == c2 {
 						break
 					}
-					total += width(c)
+					leftPad += width(c)
 				}
-				fmt.Println("covered", covered)
-				spaces += total - covered
-				// fmt.Println("spaces", n.data, spaces)
+				// traverse through prevNode's ancestory to get a
+				// node in the left-most branch of the tree
+				node := prevNode
+				for {
+					if _, ok := leftMostBranch[node]; ok {
+						break
+					}
+					node = parents[node]
+				}
+				covered := width(node)
+				spaces := leftPad - covered
+				fmt.Print(strings.Repeat(" ", spaces), n.data)
+				prevNode = n
+				continue
 			}
-
-			w := width(n)
-			fmt.Printf("%s%*s", strings.Repeat(" ", spaces), w, n.data)
-			covered += w
-
-			for _, c := range n.c {
-				nextPop++
-				q.push(c)
+			p := parents[n]
+			prev := p.c[0]
+			for _, c := range p.c[1:] {
+				if c == n {
+					break
+				}
+				prev = c
 			}
-			prev = n
+			spaces := width(prev) - 1
+			fmt.Print(strings.Repeat(" ", spaces), n.data)
+			prevNode = n
 		}
-		pop = nextPop
+		qLen = pushed
 		fmt.Println()
 	}
+}
+
+func getLeftMostBranch(root *Node) map[*Node]struct{} {
+	b := make(map[*Node]struct{})
+	b[root] = struct{}{}
+	for len(root.c) != 0 {
+		root = root.c[0]
+		b[root] = struct{}{}
+	}
+	return b
+}
+
+func isLeftMostChild(parents map[*Node]*Node, node *Node) bool {
+	p, ok := parents[node]
+	if !ok {
+		return true
+	}
+	return p.c[0] == node
 }
 
 // common ancestor and it's two children that contain node1 and node2
@@ -93,39 +132,33 @@ func commonAncestor(parents map[*Node]*Node, node1, node2 *Node) (*Node, *Node, 
 	// parent->child
 	traversed1, traversed2 := map[*Node]*Node{}, map[*Node]*Node{}
 
-	ok := true
 	traversed1[n1] = nil
-	for {
-		traversed1[parents[n1]] = n1
-		n1, ok = parents[n1]
-		if !ok {
-			break
-		}
+	p, ok := parents[n1]
+	for ok {
+		traversed1[p] = n1
+		n1 = p
+		p, ok = parents[n1]
 	}
 
 	traversed2[n2] = nil
-	for {
-		traversed2[parents[n2]] = n2
-		n2, ok = parents[n2]
-		if !ok {
-			break
-		}
+	p, ok = parents[n2]
+	for ok {
+		traversed2[p] = n2
+		n2 = p
+		p, ok = parents[n2]
 	}
 
-	// traverse n1 until root or merge point
+	// traverse upward until merge point
 	n := node1
 	for {
-		c1, ok1 := traversed1[n]
-		c2, ok2 := traversed2[n]
+		_, ok1 := traversed1[n]
+		_, ok2 := traversed2[n]
 		if ok1 && ok2 {
-			return n, c1, c2
-		}
-		n, ok = parents[n]
-		if !ok {
 			break
 		}
+		n = parents[n]
 	}
-	return nil, nil, nil
+	return n, traversed1[n], traversed2[n]
 }
 
 func getParents(parents map[*Node]*Node, n *Node) {
