@@ -3,6 +3,7 @@ package stack
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 const (
@@ -41,22 +42,22 @@ func Sprint(s Stack) (str string) {
 		s.Push(elems[i])
 	}
 
-	// w is value column width
-	vals, w := []string{}, 0
+	data, maxWidth := []string{}, 0
 	for _, e := range elems {
-		v := fmt.Sprintf("%v", e)
-		vals = append(vals, v)
-		if len(v) > w {
-			w = len(v)
+		d := fmt.Sprintf("%v", e)
+		data = append(data, d)
+		w := utf8.RuneCountInString(d)
+		if w > maxWidth {
+			maxWidth = w
 		}
 	}
-	// position column width
-	posW := digitWidth(len(vals))
+	// position column maxWidth
+	posW := digitWidth(len(data))
 
-	for i, v := range vals {
-		str += fmt.Sprintf("%s%+*s%s%*d%s\n", BoxVer, w, v, BoxVer, posW, len(vals)-i, BoxVer)
+	for i, d := range data {
+		str += fmt.Sprintf("%s%*s%s%*d%s\n", BoxVer, maxWidth, d, BoxVer, posW, len(data)-i, BoxVer)
 	}
-	str += fmt.Sprint(BoxUpRight, strings.Repeat("─", w), BoxUpHor, strings.Repeat("─", posW), BoxUpLeft, "\n")
+	str += fmt.Sprint(BoxUpRight, strings.Repeat("─", maxWidth), BoxUpHor, strings.Repeat("─", posW), BoxUpLeft, "\n")
 
 	return
 }

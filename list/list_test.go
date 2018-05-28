@@ -31,7 +31,6 @@ func TestPrint(t *testing.T) {
 └───────┘└──────┘└───┘
 `
 	got := list.Sprint(&n3)
-	list.Print(&n3)
 	if want != got {
 		t.Errorf("Expected: %s\nGot: %s\n", want, got)
 	}

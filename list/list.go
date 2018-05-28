@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"unicode/utf8"
 )
 
 const (
@@ -41,8 +42,9 @@ func Sprint(head Node) (s string) {
 
 	widths, maxDigitWidth := []int{}, digitWidth(len(data))
 	for _, d := range data {
-		if len(d) > maxDigitWidth {
-			widths = append(widths, len(d))
+		w := utf8.RuneCountInString(d)
+		if w > maxDigitWidth {
+			widths = append(widths, w)
 		} else {
 			widths = append(widths, maxDigitWidth)
 		}

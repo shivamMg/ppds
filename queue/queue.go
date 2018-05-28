@@ -3,6 +3,7 @@ package queue
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 const (
@@ -50,8 +51,9 @@ func Sprint(q Queue) (s string) {
 	for _, e := range elems {
 		d := fmt.Sprintf("%v", e)
 		data = append(data, d)
-		if len(d) > maxDigitWidth {
-			widths = append(widths, len(d))
+		w := utf8.RuneCountInString(d)
+		if w > maxDigitWidth {
+			widths = append(widths, w)
 		} else {
 			widths = append(widths, maxDigitWidth)
 		}
