@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 type Node struct {
@@ -47,14 +48,13 @@ func main() {
 	parents := map[*Node]*Node{}
 	getParents(parents, &n11)
 
-	leftMostBranch := getLeftMostBranch(&n11)
-
 	q := queue{}
 	q.push(&n11)
 	qLen := 1
 	for !q.empty() {
 		var prevNode *Node
 		pushed := 0
+		covered := 0
 		for i := 0; i < qLen; i++ {
 			n := q.pop()
 			for _, c := range n.c {
@@ -65,6 +65,7 @@ func main() {
 			if isLeftMostChild(parents, n) {
 				if i == 0 {
 					fmt.Print(n.data)
+					covered = utf8.RuneCountInString(n.data)
 					prevNode = n
 					continue
 				}
@@ -76,18 +77,9 @@ func main() {
 					}
 					leftPad += width(c)
 				}
-				// traverse through prevNode's ancestory to get a
-				// node in the left-most branch of the tree
-				node := prevNode
-				for {
-					if _, ok := leftMostBranch[node]; ok {
-						break
-					}
-					node = parents[node]
-				}
-				covered := width(node)
 				spaces := leftPad - covered
 				fmt.Print(strings.Repeat(" ", spaces), n.data)
+				covered = spaces + utf8.RuneCountInString(n.data)
 				prevNode = n
 				continue
 			}
@@ -99,23 +91,14 @@ func main() {
 				}
 				prev = c
 			}
-			spaces := width(prev) - 1
+			spaces := width(prev) - utf8.RuneCountInString(prev.data)
 			fmt.Print(strings.Repeat(" ", spaces), n.data)
+			covered += spaces + utf8.RuneCountInString(n.data)
 			prevNode = n
 		}
 		qLen = pushed
 		fmt.Println()
 	}
-}
-
-func getLeftMostBranch(root *Node) map[*Node]struct{} {
-	b := make(map[*Node]struct{})
-	b[root] = struct{}{}
-	for len(root.c) != 0 {
-		root = root.c[0]
-		b[root] = struct{}{}
-	}
-	return b
 }
 
 func isLeftMostChild(parents map[*Node]*Node, node *Node) bool {
@@ -169,12 +152,16 @@ func getParents(parents map[*Node]*Node, n *Node) {
 }
 
 func width(n *Node) int {
+	w := utf8.RuneCountInString(n.data) + 1
 	if len(n.c) == 0 {
-		return 1
+		return w
 	}
 	sum := 0
 	for _, c := range n.c {
 		sum += width(c)
 	}
-	return sum
+	if sum > w {
+		return sum
+	}
+	return w
 }
