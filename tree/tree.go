@@ -6,6 +6,15 @@ import (
 	"unicode/utf8"
 )
 
+const (
+	BoxVer       = "│"
+	BoxHor       = "─"
+	BoxVerRight  = "├"
+	BoxDownLeft  = "┐"
+	BoxDownRight = "┌"
+	BoxDownHor   = "┬"
+)
+
 type Node struct {
 	data string
 	c    []*Node
@@ -32,6 +41,13 @@ func (q *queue) pop() *Node {
 	return ele
 }
 
+func (q *queue) peek() *Node {
+	if q.empty() {
+		return nil
+	}
+	return q.arr[0]
+}
+
 func main() {
 	n1, n2 := Node{data: "1"}, Node{data: "2"}
 	n3 := Node{"5", []*Node{&n1, &n2}}
@@ -51,10 +67,13 @@ func main() {
 	q := queue{}
 	q.push(&n11)
 	qLen := 1
+	isRoot := true
 	for !q.empty() {
 		var prevNode *Node
 		pushed := 0
 		covered := 0
+		branchLine := ""
+		line := ""
 		for i := 0; i < qLen; i++ {
 			n := q.pop()
 			for _, c := range n.c {
@@ -64,8 +83,18 @@ func main() {
 
 			if isLeftMostChild(parents, n) {
 				if i == 0 {
-					fmt.Print(n.data)
+					// fmt.Print(n.data)
+					line += n.data
 					covered = utf8.RuneCountInString(n.data)
+					if !isRoot {
+						if isLeftMostChild(parents, q.peek()) {
+							branchLine += BoxVer
+						} else {
+							branchLine += BoxVerRight
+						}
+						branchLine += strings.Repeat(BoxHor, covered-1)
+					}
+					isRoot = false
 					prevNode = n
 					continue
 				}
@@ -78,8 +107,17 @@ func main() {
 					leftPad += width(c)
 				}
 				spaces := leftPad - covered
-				fmt.Print(strings.Repeat(" ", spaces), n.data)
-				covered = spaces + utf8.RuneCountInString(n.data)
+				// fmt.Print(strings.Repeat(" ", spaces), n.data)
+				line += strings.Repeat(" ", spaces) + n.data
+				w := utf8.RuneCountInString(n.data)
+				covered = spaces + w
+				branchLine += strings.Repeat(" ", spaces)
+				if isLeftMostChild(parents, q.peek()) {
+					branchLine += BoxVer
+				} else {
+					branchLine += BoxVerRight
+				}
+				branchLine += strings.Repeat(BoxHor, w-1)
 				prevNode = n
 				continue
 			}
@@ -92,12 +130,22 @@ func main() {
 				prev = c
 			}
 			spaces := width(prev) - utf8.RuneCountInString(prev.data)
-			fmt.Print(strings.Repeat(" ", spaces), n.data)
-			covered += spaces + utf8.RuneCountInString(n.data)
+			// fmt.Print(strings.Repeat(" ", spaces), n.data)
+			line += strings.Repeat(" ", spaces) + n.data
+			w := utf8.RuneCountInString(n.data)
+			covered += spaces + w
+			branchLine += strings.Repeat(BoxHor, spaces)
+			if isLeftMostChild(parents, q.peek()) {
+				branchLine += BoxDownLeft
+			} else {
+				branchLine += BoxDownHor
+			}
+			branchLine += strings.Repeat(BoxHor, w-1)
 			prevNode = n
 		}
 		qLen = pushed
-		fmt.Println()
+		fmt.Println(branchLine)
+		fmt.Println(line)
 	}
 }
 
