@@ -84,15 +84,15 @@ func main() {
 			if isLeftMostChild(parents, n) {
 				if i == 0 {
 					// fmt.Print(n.data)
-					line += n.data
+					pad := strings.Repeat(" ", rootLeftPad(parents, n))
+					line += pad + n.data
 					covered = utf8.RuneCountInString(n.data)
 					if !isRoot {
 						if isLeftMostChild(parents, q.peek()) {
-							branchLine += BoxVer
+							branchLine += pad + BoxVer + strings.Repeat(" ", covered-1)
 						} else {
-							branchLine += BoxVerRight
+							branchLine += pad + BoxVerRight + strings.Repeat(BoxHor, covered-1)
 						}
-						branchLine += strings.Repeat(BoxHor, covered-1)
 					}
 					isRoot = false
 					prevNode = n
@@ -110,14 +110,13 @@ func main() {
 				// fmt.Print(strings.Repeat(" ", spaces), n.data)
 				line += strings.Repeat(" ", spaces) + n.data
 				w := utf8.RuneCountInString(n.data)
-				covered = spaces + w
+				covered += spaces + w
 				branchLine += strings.Repeat(" ", spaces)
 				if isLeftMostChild(parents, q.peek()) {
-					branchLine += BoxVer
+					branchLine += BoxVer + strings.Repeat(" ", w-1)
 				} else {
-					branchLine += BoxVerRight
+					branchLine += BoxVerRight + strings.Repeat(BoxHor, w-1)
 				}
-				branchLine += strings.Repeat(BoxHor, w-1)
 				prevNode = n
 				continue
 			}
@@ -136,17 +135,32 @@ func main() {
 			covered += spaces + w
 			branchLine += strings.Repeat(BoxHor, spaces)
 			if isLeftMostChild(parents, q.peek()) {
-				branchLine += BoxDownLeft
+				branchLine += BoxDownLeft + strings.Repeat(" ", w-1)
 			} else {
-				branchLine += BoxDownHor
+				branchLine += BoxDownHor + strings.Repeat(BoxHor, w-1)
 			}
-			branchLine += strings.Repeat(BoxHor, w-1)
 			prevNode = n
 		}
 		qLen = pushed
 		fmt.Println(branchLine)
 		fmt.Println(line)
 	}
+}
+
+func rootLeftPad(parents map[*Node]*Node, node *Node) int {
+	pad := 0
+	p, ok := parents[node]
+	for ok {
+		for _, c := range p.c {
+			if c == node {
+				break
+			}
+			pad += width(c)
+		}
+		node = p
+		p, ok = parents[p]
+	}
+	return pad
 }
 
 func isLeftMostChild(parents map[*Node]*Node, node *Node) bool {
