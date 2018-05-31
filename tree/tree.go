@@ -1,4 +1,4 @@
-package main
+package tree
 
 import (
 	"fmt"
@@ -13,26 +13,35 @@ const (
 	BoxDownLeft  = "┐"
 	BoxDownRight = "┌"
 	BoxDownHor   = "┬"
+	// Gutter is space between two adjacent child nodes
+	Gutter = 2
 )
 
-type Node struct {
-	data string
-	c    []*Node
+// Node represents a node in a tree.
+type Node interface {
+	// Data must return a string representing the value contained by the node.
+	Data() string
+	// Children must return a list of all child nodes of the node.
+	Children() []Node
 }
 
 type queue struct {
-	arr []*Node
+	arr []Node
 }
 
 func (q queue) empty() bool {
 	return len(q.arr) == 0
 }
 
-func (q *queue) push(n *Node) {
+func (q queue) len() int {
+	return len(q.arr)
+}
+
+func (q *queue) push(n Node) {
 	q.arr = append(q.arr, n)
 }
 
-func (q *queue) pop() *Node {
+func (q *queue) pop() Node {
 	if q.empty() {
 		return nil
 	}
@@ -41,188 +50,122 @@ func (q *queue) pop() *Node {
 	return ele
 }
 
-func (q *queue) peek() *Node {
+func (q *queue) peek() Node {
 	if q.empty() {
 		return nil
 	}
 	return q.arr[0]
 }
 
-func main() {
-	n1, n2 := Node{data: "1"}, Node{data: "2"}
-	n3 := Node{"5", []*Node{&n1, &n2}}
-	n4, n5 := Node{data: "8"}, Node{data: "6"}
-	n6 := Node{"3", []*Node{&n3, &n4, &n5}}
+// Print prints the formatted tree to standard output.
+func Print(root Node) {
+	fmt.Println(Sprint(root))
+}
 
-	n7, n8 := Node{data: "8"}, Node{data: "9"}
-	n9 := Node{"7", []*Node{&n7, &n8}}
-	n10 := Node{"4", []*Node{&n9}}
+// Sprint returns the formatted tree.
+func Sprint(root Node) string {
+	parents := map[Node]Node{}
+	setParents(parents, root)
+	isLeftMostChild := func(n Node) bool {
+		p, ok := parents[n]
+		if !ok {
+			// root
+			return true
+		}
+		return p.Children()[0] == n
+	}
 
-	n11 := Node{"2", []*Node{&n6, &n10}}
-
-	// get parents
-	parents := map[*Node]*Node{}
-	getParents(parents, &n11)
+	paddings := map[Node]int{}
+	setPaddings(paddings, map[Node]int{}, 0, root)
 
 	q := queue{}
-	q.push(&n11)
-	qLen := 1
-	isRoot := true
+	q.push(root)
+	lines := []string{}
 	for !q.empty() {
-		var prevNode *Node
-		pushed := 0
+		// line storing branches, and line storing nodes
+		branches, nodes := "", ""
+		// runes covered
 		covered := 0
-		branchLine := ""
-		line := ""
+		qLen := q.len()
 		for i := 0; i < qLen; i++ {
 			n := q.pop()
-			for _, c := range n.c {
-				pushed++
+			for _, c := range n.Children() {
 				q.push(c)
 			}
 
-			if isLeftMostChild(parents, n) {
-				if i == 0 {
-					// fmt.Print(n.data)
-					pad := strings.Repeat(" ", rootLeftPad(parents, n))
-					line += pad + n.data
-					covered = utf8.RuneCountInString(n.data)
-					if !isRoot {
-						if isLeftMostChild(parents, q.peek()) {
-							branchLine += pad + BoxVer + strings.Repeat(" ", covered-1)
-						} else {
-							branchLine += pad + BoxVerRight + strings.Repeat(BoxHor, covered-1)
-						}
-					}
-					isRoot = false
-					prevNode = n
-					continue
-				}
-				anc, _, c2 := commonAncestor(parents, prevNode, n)
-				leftPad := 0
-				for _, c := range anc.c {
-					if c == c2 {
-						break
-					}
-					leftPad += width(c)
-				}
-				spaces := leftPad - covered
-				// fmt.Print(strings.Repeat(" ", spaces), n.data)
-				line += strings.Repeat(" ", spaces) + n.data
-				w := utf8.RuneCountInString(n.data)
-				covered += spaces + w
-				branchLine += strings.Repeat(" ", spaces)
-				if isLeftMostChild(parents, q.peek()) {
-					branchLine += BoxVer + strings.Repeat(" ", w-1)
-				} else {
-					branchLine += BoxVerRight + strings.Repeat(BoxHor, w-1)
-				}
-				prevNode = n
-				continue
-			}
-			p := parents[n]
-			prev := p.c[0]
-			for _, c := range p.c[1:] {
-				if c == n {
-					break
-				}
-				prev = c
-			}
-			spaces := width(prev) - utf8.RuneCountInString(prev.data)
-			// fmt.Print(strings.Repeat(" ", spaces), n.data)
-			line += strings.Repeat(" ", spaces) + n.data
-			w := utf8.RuneCountInString(n.data)
+			spaces := paddings[n] - covered
+			nodes += strings.Repeat(" ", spaces) + n.Data()
+
+			w := utf8.RuneCountInString(n.Data())
 			covered += spaces + w
-			branchLine += strings.Repeat(BoxHor, spaces)
-			if isLeftMostChild(parents, q.peek()) {
-				branchLine += BoxDownLeft + strings.Repeat(" ", w-1)
+			current, next := isLeftMostChild(n), isLeftMostChild(q.peek())
+			if current {
+				branches += strings.Repeat(" ", spaces)
 			} else {
-				branchLine += BoxDownHor + strings.Repeat(BoxHor, w-1)
+				branches += strings.Repeat(BoxHor, spaces)
 			}
-			prevNode = n
-		}
-		qLen = pushed
-		fmt.Println(branchLine)
-		fmt.Println(line)
-	}
-}
 
-func rootLeftPad(parents map[*Node]*Node, node *Node) int {
-	pad := 0
-	p, ok := parents[node]
-	for ok {
-		for _, c := range p.c {
-			if c == node {
-				break
+			if current && next {
+				branches += BoxVer
+			} else if current {
+				branches += BoxVerRight
+			} else if next {
+				branches += BoxDownLeft
+			} else {
+				branches += BoxDownHor
 			}
-			pad += width(c)
+
+			if next {
+				branches += strings.Repeat(" ", w-1)
+			} else {
+				branches += strings.Repeat(BoxHor, w-1)
+			}
 		}
-		node = p
-		p, ok = parents[p]
+		lines = append(lines, branches, nodes)
 	}
-	return pad
+
+	s := ""
+	for _, line := range lines[1:] { // ignore first line since it's the branch above root
+		s += line + "\n"
+	}
+	return s
 }
 
-func isLeftMostChild(parents map[*Node]*Node, node *Node) bool {
-	p, ok := parents[node]
-	if !ok {
-		return true
-	}
-	return p.c[0] == node
-}
-
-// common ancestor and it's two children that contain node1 and node2
-func commonAncestor(parents map[*Node]*Node, node1, node2 *Node) (*Node, *Node, *Node) {
-	n1, n2 := node1, node2
-	// parent->child
-	traversed1, traversed2 := map[*Node]*Node{}, map[*Node]*Node{}
-
-	traversed1[n1] = nil
-	p, ok := parents[n1]
-	for ok {
-		traversed1[p] = n1
-		n1 = p
-		p, ok = parents[n1]
-	}
-
-	traversed2[n2] = nil
-	p, ok = parents[n2]
-	for ok {
-		traversed2[p] = n2
-		n2 = p
-		p, ok = parents[n2]
-	}
-
-	// traverse upward until merge point
-	n := node1
-	for {
-		_, ok1 := traversed1[n]
-		_, ok2 := traversed2[n]
-		if ok1 && ok2 {
-			break
-		}
-		n = parents[n]
-	}
-	return n, traversed1[n], traversed2[n]
-}
-
-func getParents(parents map[*Node]*Node, n *Node) {
-	for _, c := range n.c {
-		parents[c] = n
-		getParents(parents, c)
+// setPaddings sets left padding (distance of a node from the root)
+// for each node in the tree.
+func setPaddings(paddings map[Node]int, widths map[Node]int, pad int, root Node) {
+	for _, c := range root.Children() {
+		paddings[c] = pad
+		setPaddings(paddings, widths, pad, c)
+		pad += width(widths, c)
 	}
 }
 
-func width(n *Node) int {
-	w := utf8.RuneCountInString(n.data) + 1
-	if len(n.c) == 0 {
+// setParents sets child-parent relationships for the tree rooted
+// at root.
+func setParents(parents map[Node]Node, root Node) {
+	for _, c := range root.Children() {
+		parents[c] = root
+		setParents(parents, c)
+	}
+}
+
+// width returns either the sum of widths of it's children or its own
+// data length depending on which one is bigger. widths is used in
+// memoization.
+func width(widths map[Node]int, n Node) int {
+	w := utf8.RuneCountInString(n.Data()) + Gutter
+	widths[n] = w
+	if len(n.Children()) == 0 {
 		return w
 	}
+
 	sum := 0
-	for _, c := range n.c {
-		sum += width(c)
+	for _, c := range n.Children() {
+		sum += width(widths, c)
 	}
 	if sum > w {
+		widths[n] = sum
 		return sum
 	}
 	return w
