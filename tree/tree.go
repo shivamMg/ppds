@@ -154,6 +154,10 @@ func setParents(parents map[Node]Node, root Node) {
 // data length depending on which one is bigger. widths is used in
 // memoization.
 func width(widths map[Node]int, n Node) int {
+	if w, ok := widths[n]; ok {
+		return w
+	}
+
 	w := utf8.RuneCountInString(n.Data()) + Gutter
 	widths[n] = w
 	if len(n.Children()) == 0 {
