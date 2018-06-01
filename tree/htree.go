@@ -8,29 +8,34 @@ import (
 
 // PrintHr prints the horizontal formatted tree to standard output.
 func PrintHr(root Node) {
-	fmt.Print(Sprint(root))
+	fmt.Print(SprintHr(root))
 }
 
 // SprintHr returns the horizontal formatted tree.
 func SprintHr(root Node) string {
-	return strings.Join(lines(root), "\n") + "\n"
+	lines := lines(root)
+	for i, line := range lines {
+		lines[i] = string([]rune(line)[1:])
+	}
+	return strings.Join(lines, "\n") + "\n"
 }
 
 func lines(root Node) (s []string) {
+	data := BoxHor + root.Data() + " "
 	l := len(root.Children())
 	if l == 0 {
-		s = append(s, root.Data())
+		s = append(s, data)
 		return
 	}
 
-	w := utf8.RuneCountInString(root.Data())
+	w := utf8.RuneCountInString(data)
 	for i, c := range root.Children() {
 		for j, line := range lines(c) {
 			if i == 0 && j == 0 {
 				if l == 1 {
-					s = append(s, root.Data()+BoxHor+line)
+					s = append(s, data+BoxHor+line)
 				} else {
-					s = append(s, root.Data()+BoxDownHor+line)
+					s = append(s, data+BoxDownHor+line)
 				}
 				continue
 			}

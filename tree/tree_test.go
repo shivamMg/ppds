@@ -62,10 +62,10 @@ func TestSprintHor(t *testing.T) {
 	n5, n6 := Node{"b", []*Node{&n4, &n3}}, Node{data: "g"}
 	n7 := Node{"a", []*Node{&n5, &n6}}
 
-	want := `a┬b┬c─h
- │ └d┬e
- │   └f
- └g
+	want := `a ┬─b ┬─c ──h 
+  │   └─d ┬─e 
+  │       └─f 
+  └─g 
 `
 
 	got := tree.SprintHr(&n7)
