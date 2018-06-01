@@ -13,7 +13,8 @@ const (
 	BoxDownLeft  = "┐"
 	BoxDownRight = "┌"
 	BoxDownHor   = "┬"
-	// Gutter is space between two adjacent child nodes
+	BoxUpRight   = "└"
+	// Gutter is number of spaces between two adjacent child nodes
 	Gutter = 2
 )
 
@@ -59,7 +60,7 @@ func (q *queue) peek() Node {
 
 // Print prints the formatted tree to standard output.
 func Print(root Node) {
-	fmt.Println(Sprint(root))
+	fmt.Print(Sprint(root))
 }
 
 // Sprint returns the formatted tree.
@@ -124,11 +125,8 @@ func Sprint(root Node) string {
 		lines = append(lines, branches, nodes)
 	}
 
-	s := ""
-	for _, line := range lines[1:] { // ignore first line since it's the branch above root
-		s += line + "\n"
-	}
-	return s
+	// ignore first line since it's the branch above root
+	return strings.Join(lines[1:], "\n") + "\n"
 }
 
 // setPaddings sets left padding (distance of a node from the root)

@@ -54,3 +54,22 @@ Vintage  Role enactment   Drugs  BDSM                         Gonewild  Public
 		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}
 }
+
+func TestSprintHor(t *testing.T) {
+	n1, n2 := Node{data: "e"}, Node{data: "f"}
+	n8 := Node{data: "h"}
+	n3, n4 := Node{"d", []*Node{&n1, &n2}}, Node{"c", []*Node{&n8}}
+	n5, n6 := Node{"b", []*Node{&n4, &n3}}, Node{data: "g"}
+	n7 := Node{"a", []*Node{&n5, &n6}}
+
+	want := `a┬b┬c─h
+ │ └d┬e
+ │   └f
+ └g
+`
+
+	got := tree.SprintHr(&n7)
+	if got != want {
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
+	}
+}
