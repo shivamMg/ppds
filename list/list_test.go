@@ -30,8 +30,8 @@ func TestPrint(t *testing.T) {
 │      1││     2││  3│
 └───────┘└──────┘└───┘
 `
-	got := list.Sprint(&n3)
+	got := list.Sprint(n3)
 	if want != got {
-		t.Errorf("Expected: %s\nGot: %s\n", want, got)
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}
 }

@@ -20,10 +20,10 @@ const (
 
 // Node represents a linked list node.
 type Node interface {
-	// Data must return a string representing the value contained by the node.
+	// Data must return a string representing the value of node.
 	Data() string
-	// Next must return the address of the next node. To mark the end of the list
-	// return the zero value of the type.
+	// Next must return a pointer to the next node. The last element
+	// of the list must return a nil pointer.
 	Next() Node
 }
 

@@ -6,15 +6,15 @@ import (
 	"github.com/shivammg/ppds/queue"
 )
 
-type MyQueue struct {
+type myQueue struct {
 	elems []int
 }
 
-func (q *MyQueue) push(ele int) {
+func (q *myQueue) push(ele int) {
 	q.elems = append([]int{ele}, q.elems...)
 }
 
-func (q *MyQueue) pop() (int, bool) {
+func (q *myQueue) pop() (int, bool) {
 	if len(q.elems) == 0 {
 		return 0, false
 	}
@@ -23,16 +23,16 @@ func (q *MyQueue) pop() (int, bool) {
 	return e, true
 }
 
-func (q *MyQueue) Enqueue(ele interface{}) {
+func (q *myQueue) Push(ele interface{}) {
 	q.push(ele.(int))
 }
 
-func (q *MyQueue) Dequeue() (interface{}, bool) {
+func (q *myQueue) Pop() (interface{}, bool) {
 	return q.pop()
 }
 
 func TestSprint(t *testing.T) {
-	q := MyQueue{}
+	q := myQueue{}
 	q.push(10)
 	q.push(11)
 	q.push(12)
@@ -45,6 +45,6 @@ func TestSprint(t *testing.T) {
 `
 	got := queue.Sprint(&q)
 	if got != want {
-		t.Errorf("Expected: %s\nGot: %s", want, got)
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}
 }

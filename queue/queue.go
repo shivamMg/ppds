@@ -20,12 +20,12 @@ const (
 
 // Queue represents a queue of elements.
 type Queue interface {
-	// Dequeue must return the first (FIFO) element out of the queue. If queue is
+	// Pop must pop and return the first element out of the queue. If queue is
 	// empty ok should be false, else true.
-	Dequeue() (ele interface{}, ok bool)
-	// Enqueue must insert ele in the queue. Since ele is of interface type, type
-	// assertion must be done before inserting inside the queue.
-	Enqueue(ele interface{})
+	Pop() (ele interface{}, ok bool)
+	// Push must insert ele in the queue. Since ele is of interface type, type
+	// assertion must be done before inserting in the queue.
+	Push(ele interface{})
 }
 
 // Print prints the formatted queue to standard output.
@@ -36,14 +36,14 @@ func Print(q Queue) {
 // Sprint returns the formatted queue.
 func Sprint(q Queue) (s string) {
 	elems := []interface{}{}
-	e, ok := q.Dequeue()
+	e, ok := q.Pop()
 	for ok {
 		elems = append(elems, e)
-		e, ok = q.Dequeue()
+		e, ok = q.Pop()
 	}
 
 	for _, e := range elems {
-		q.Enqueue(e)
+		q.Push(e)
 	}
 
 	maxDigitWidth := digitWidth(len(elems))

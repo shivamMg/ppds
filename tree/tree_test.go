@@ -11,11 +11,11 @@ type Node struct {
 	c    []*Node
 }
 
-func (n *Node) Data() string {
+func (n Node) Data() string {
 	return n.data
 }
 
-func (n *Node) Children() (children []tree.Node) {
+func (n Node) Children() (children []tree.Node) {
 	for _, c := range n.c {
 		children = append(children, tree.Node(c))
 	}
