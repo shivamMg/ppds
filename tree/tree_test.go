@@ -55,20 +55,58 @@ Vintage  Role enactment   Drugs  BDSM                         Gonewild  Public
 	}
 }
 
-func TestSprintHor(t *testing.T) {
-	n1, n2 := Node{data: "e"}, Node{data: "f"}
-	n8 := Node{data: "h"}
-	n3, n4 := Node{"d", []*Node{&n1, &n2}}, Node{"c", []*Node{&n8}}
-	n5, n6 := Node{"b", []*Node{&n4, &n3}}, Node{data: "g"}
-	n7 := Node{"a", []*Node{&n5, &n6}}
+func TestSprintFuncs(t *testing.T) {
+	var classical, popRock Node
+	{
+		n1, n2 := Node{data: "Light"}, Node{data: "Heavy"}
+		n3, n4 := Node{data: "Piano"}, Node{"Orchestra", []*Node{&n1, &n2}}
+		n5, n6 := Node{data: "Male"}, Node{data: "Female"}
+		n7, n8 := Node{"Opera", []*Node{&n5, &n6}}, Node{data: "Chorus"}
+		n9, n10 := Node{"Instrumental", []*Node{&n3, &n4}}, Node{"Vocal", []*Node{&n7, &n8}}
+		classical = Node{"Classical", []*Node{&n9, &n10}}
+	}
+	{
+		n3 := Node{data: "Heavy metal"}
+		n4, n5 := Node{data: "Dancing"}, Node{data: "Soft"}
+		n6, n7 := Node{"Rock", []*Node{&n3}}, Node{"Country", []*Node{&n4, &n5}}
+		n8, n9 := Node{data: "Late pop"}, Node{data: "Disco"}
+		n10, n11 := Node{data: "Soft techno"}, Node{data: "Hard techno"}
+		n12, n13 := Node{"Pop", []*Node{&n8, &n9}}, Node{"Techno", []*Node{&n10, &n11}}
+		n14, n15 := Node{"Organic", []*Node{&n6, &n7}}, Node{"Electronic", []*Node{&n12, &n13}}
+		popRock = Node{"Pop/Rock", []*Node{&n14, &n15}}
+	}
+	music := Node{"Music", []*Node{&classical, &popRock}}
 
-	want := `a ┬─b ┬─c ──h 
-  │   └─d ┬─e 
-  │       └─f 
-  └─g 
+	want := `Music
+├──────────────────────────────────────────┐       
+Classical                                  Pop/Rock
+├────────────────────┐                     ├───────────────────────────┐         
+Instrumental         Vocal                 Organic                     Electronic
+├──────┐             ├─────────────┐       ├────────────┐              ├────────────────┐     
+Piano  Orchestra     Opera         Chorus  Rock         Country        Pop              Techno
+       ├──────┐      ├─────┐               │            ├────────┐     ├─────────┐      ├────────────┐          
+       Light  Heavy  Male  Female          Heavy metal  Dancing  Soft  Late pop  Disco  Soft techno  Hard techno
 `
+	got := tree.Sprint(&music)
+	if got != want {
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
+	}
 
-	got := tree.SprintHr(&n7)
+	want = `Music ┬─ Classical ┬─ Instrumental ┬─ Piano 
+      │            │               └─ Orchestra ┬─ Light 
+      │            │                            └─ Heavy 
+      │            └─ Vocal ┬─ Opera ┬─ Male 
+      │                     │        └─ Female 
+      │                     └─ Chorus 
+      └─ Pop/Rock ┬─ Organic ┬─ Rock ── Heavy metal 
+                  │          └─ Country ┬─ Dancing 
+                  │                     └─ Soft 
+                  └─ Electronic ┬─ Pop ┬─ Late pop 
+                                │      └─ Disco 
+                                └─ Techno ┬─ Soft techno 
+                                          └─ Hard techno 
+`
+	got = tree.SprintHr(&music)
 	if got != want {
 		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}

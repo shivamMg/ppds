@@ -15,13 +15,13 @@ func PrintHr(root Node) {
 func SprintHr(root Node) string {
 	lines := lines(root)
 	for i, line := range lines {
-		lines[i] = string([]rune(line)[1:])
+		lines[i] = string([]rune(line)[2:])
 	}
 	return strings.Join(lines, "\n") + "\n"
 }
 
 func lines(root Node) (s []string) {
-	data := BoxHor + root.Data() + " "
+	data := fmt.Sprintf("%s %s ", BoxHor, root.Data())
 	l := len(root.Children())
 	if l == 0 {
 		s = append(s, data)

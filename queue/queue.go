@@ -48,8 +48,8 @@ func Sprint(q Queue) (s string) {
 
 	maxDigitWidth := digitWidth(len(elems))
 	data, widths := []string{}, []int{}
-	for _, e := range elems {
-		d := fmt.Sprintf("%v", e)
+	for i := len(elems) - 1; i >= 0; i-- {
+		d := fmt.Sprintf("%v", elems[i])
 		data = append(data, d)
 		w := utf8.RuneCountInString(d)
 		if w > maxDigitWidth {
