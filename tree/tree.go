@@ -125,8 +125,13 @@ func Sprint(root Node) string {
 		lines = append(lines, branches, nodes)
 	}
 
+	s := ""
 	// ignore first line since it's the branch above root
-	return strings.Join(lines[1:], "\n") + "\n"
+	for _, line := range lines[1:] {
+		s += strings.TrimRight(line, " ") + "\n"
+
+	}
+	return s
 }
 
 // setPaddings sets left padding (distance of a node from the root)

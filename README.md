@@ -89,7 +89,7 @@ type Stack interface {
 └───────────────┴─┘
 ```
 
-### Queue
+### Queues
 [![queue](https://godoc.org/github.com/shivammg/ppds?status.svg)](https://godoc.org/github.com/shivamMg/ppds/queue)
 
 ```

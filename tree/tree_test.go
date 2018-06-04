@@ -39,13 +39,13 @@ func TestSprint(t *testing.T) {
 	n10 := Node{"Pr0n", []*Node{&n11, &n9, &n15}}
 
 	const want = `Pr0n
-├────────┬────────────────────────────────────────────────────┐         
+├────────┬────────────────────────────────────────────────────┐
 Classic  Fetish                                               Exhibition
-│        ├────────────────┬──────┐                            ├─────────┐     
+│        ├────────────────┬──────┐                            ├─────────┐
 Vintage  Role enactment   Drugs  BDSM                         Gonewild  Public
-         ├─────────┐             ├────────┬────────┐        
+         ├─────────┐             ├────────┬────────┐
          Age play  Furry         Dom&Sub  Bondage  Masochism
-                                 │     
+                                 │
                                  Femdom
 `
 
@@ -78,13 +78,13 @@ func TestSprintFuncs(t *testing.T) {
 	music := Node{"Music", []*Node{&classical, &popRock}}
 
 	want := `Music
-├──────────────────────────────────────────┐       
+├──────────────────────────────────────────┐
 Classical                                  Pop/Rock
-├────────────────────┐                     ├───────────────────────────┐         
+├────────────────────┐                     ├───────────────────────────┐
 Instrumental         Vocal                 Organic                     Electronic
-├──────┐             ├─────────────┐       ├────────────┐              ├────────────────┐     
+├──────┐             ├─────────────┐       ├────────────┐              ├────────────────┐
 Piano  Orchestra     Opera         Chorus  Rock         Country        Pop              Techno
-       ├──────┐      ├─────┐               │            ├────────┐     ├─────────┐      ├────────────┐          
+       ├──────┐      ├─────┐               │            ├────────┐     ├─────────┐      ├────────────┐
        Light  Heavy  Male  Female          Heavy metal  Dancing  Soft  Late pop  Disco  Soft techno  Hard techno
 `
 	got := tree.Sprint(&music)
@@ -92,19 +92,19 @@ Piano  Orchestra     Opera         Chorus  Rock         Country        Pop      
 		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}
 
-	want = `Music ┬─ Classical ┬─ Instrumental ┬─ Piano 
-      │            │               └─ Orchestra ┬─ Light 
-      │            │                            └─ Heavy 
-      │            └─ Vocal ┬─ Opera ┬─ Male 
-      │                     │        └─ Female 
-      │                     └─ Chorus 
-      └─ Pop/Rock ┬─ Organic ┬─ Rock ── Heavy metal 
-                  │          └─ Country ┬─ Dancing 
-                  │                     └─ Soft 
-                  └─ Electronic ┬─ Pop ┬─ Late pop 
-                                │      └─ Disco 
-                                └─ Techno ┬─ Soft techno 
-                                          └─ Hard techno 
+	want = `Music ┬─ Classical ┬─ Instrumental ┬─ Piano
+      │            │               └─ Orchestra ┬─ Light
+      │            │                            └─ Heavy
+      │            └─ Vocal ┬─ Opera ┬─ Male
+      │                     │        └─ Female
+      │                     └─ Chorus
+      └─ Pop/Rock ┬─ Organic ┬─ Rock ── Heavy metal
+                  │          └─ Country ┬─ Dancing
+                  │                     └─ Soft
+                  └─ Electronic ┬─ Pop ┬─ Late pop
+                                │      └─ Disco
+                                └─ Techno ┬─ Soft techno
+                                          └─ Hard techno
 `
 	got = tree.SprintHr(&music)
 	if got != want {

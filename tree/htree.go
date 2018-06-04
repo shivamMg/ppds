@@ -12,12 +12,13 @@ func PrintHr(root Node) {
 }
 
 // SprintHr returns the horizontal formatted tree.
-func SprintHr(root Node) string {
-	lines := lines(root)
-	for i, line := range lines {
-		lines[i] = string([]rune(line)[2:])
+func SprintHr(root Node) (s string) {
+	for _, line := range lines(root) {
+		// ignore runes before root node
+		line = string([]rune(line)[2:])
+		s += strings.TrimRight(line, " ") + "\n"
 	}
-	return strings.Join(lines, "\n") + "\n"
+	return
 }
 
 func lines(root Node) (s []string) {

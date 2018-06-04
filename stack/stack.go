@@ -55,9 +55,9 @@ func Sprint(s Stack) (str string) {
 	posW := digitWidth(len(data))
 
 	for i, d := range data {
-		str += fmt.Sprintf("%s%*s%s%*d%s\n", BoxVer, maxWidth, d, BoxVer, posW, len(data)-i, BoxVer)
+		str += fmt.Sprintf("%s %*s %s%*d%s\n", BoxVer, maxWidth, d, BoxVer, posW, len(data)-i, BoxVer)
 	}
-	str += fmt.Sprint(BoxUpRight, strings.Repeat("─", maxWidth), BoxUpHor, strings.Repeat("─", posW), BoxUpLeft, "\n")
+	str += fmt.Sprint(BoxUpRight, strings.Repeat("─", maxWidth+2), BoxUpHor, strings.Repeat("─", posW), BoxUpLeft, "\n")
 
 	return
 }
