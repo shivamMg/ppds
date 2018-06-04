@@ -3,7 +3,7 @@ Package stack provides implementation to get and print formatted stack.
 
 Example:
 
-	import "github.com/shivammg/ppds/stack"
+	import "github.com/shivamMg/ppds/stack"
 
 	// a stack implementation.
 	type myStack struct {

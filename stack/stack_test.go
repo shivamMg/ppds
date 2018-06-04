@@ -3,7 +3,7 @@ package stack_test
 import (
 	"testing"
 
-	"github.com/shivammg/ppds/stack"
+	"github.com/shivamMg/ppds/stack"
 )
 
 type myStack struct {

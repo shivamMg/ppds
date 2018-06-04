@@ -3,7 +3,7 @@ package queue_test
 import (
 	"testing"
 
-	"github.com/shivammg/ppds/queue"
+	"github.com/shivamMg/ppds/queue"
 )
 
 type myQueue struct {

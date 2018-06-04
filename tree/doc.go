@@ -3,7 +3,7 @@ Package tree provides implementation to get and print formatted tree.
 
 Example:
 
-	import "github.com/shivammg/ppds/tree"
+	import "github.com/shivamMg/ppds/tree"
 
 	// a tree node.
 	type Node struct {

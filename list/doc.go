@@ -3,7 +3,7 @@ Package list provides implementation to get and print formatted linked list.
 
 Example:
 
-	import "github.com/shivammg/ppds/list"
+	import "github.com/shivamMg/ppds/list"
 
 	// a linked list node. implements list.Node.
 	type Node struct {

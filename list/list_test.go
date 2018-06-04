@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/shivammg/ppds/list"
+	"github.com/shivamMg/ppds/list"
 )
 
 type Node struct {

@@ -3,7 +3,7 @@ package tree_test
 import (
 	"testing"
 
-	"github.com/shivammg/ppds/tree"
+	"github.com/shivamMg/ppds/tree"
 )
 
 type Node struct {

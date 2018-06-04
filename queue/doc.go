@@ -3,7 +3,7 @@ Package queue provides implementation to get and print formatted queue.
 
 Example:
 
-	import "github.com/shivammg/ppds/queue"
+	import "github.com/shivamMg/ppds/queue"
 
 	// a queue implementation.
 	type myQueue struct {
