@@ -55,7 +55,7 @@ Vintage  Role enactment   Drugs  BDSM                         Gonewild  Public
 	}
 }
 
-func TestSprintFuncs(t *testing.T) {
+func TestSprintAndSprintHr(t *testing.T) {
 	var classical, popRock Node
 	{
 		n1, n2 := Node{data: "Light"}, Node{data: "Heavy"}

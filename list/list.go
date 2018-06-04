@@ -29,7 +29,7 @@ type Node interface {
 
 // Print prints the formatted linked list to standard output.
 func Print(head Node) {
-	fmt.Println(Sprint(head))
+	fmt.Print(Sprint(head))
 }
 
 // Sprint returns the formatted linked list.
