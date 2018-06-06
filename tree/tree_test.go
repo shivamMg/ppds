@@ -110,4 +110,36 @@ Piano  Orchestra     Opera         Chorus  Rock         Country        Pop      
 	if got != want {
 		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}
+
+	want = `Music
+├─ Classical
+│  ├─ Instrumental
+│  │  ├─ Piano
+│  │  └─ Orchestra
+│  │     ├─ Light
+│  │     └─ Heavy
+│  └─ Vocal
+│     ├─ Opera
+│     │  ├─ Male
+│     │  └─ Female
+│     └─ Chorus
+└─ Pop/Rock
+   ├─ Organic
+   │  ├─ Rock
+   │  │  └─ Heavy metal
+   │  └─ Country
+   │     ├─ Dancing
+   │     └─ Soft
+   └─ Electronic
+      ├─ Pop
+      │  ├─ Late pop
+      │  └─ Disco
+      └─ Techno
+         ├─ Soft techno
+         └─ Hard techno
+`
+	got = tree.SprintHrn(&music)
+	if got != want {
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
+	}
 }

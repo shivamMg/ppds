@@ -1,4 +1,4 @@
-# ppds [![godoc](https://godoc.org/github.com/shivammg/ppds?status.svg)](https://godoc.org/github.com/shivamMg/ppds) [![Go Report Card](https://goreportcard.com/badge/github.com/shivammg/ppds)](https://goreportcard.com/report/github.com/shivammg/ppds) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# ppds [![godoc](https://godoc.org/github.com/shivammg/ppds?status.svg)](https://godoc.org/github.com/shivamMg/ppds) [![Build](https://travis-ci.com/shivamMg/ppds.svg?branch=master)](https://travis-ci.com/shivamMg/ppds) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Pretty Print Data Structures
 
@@ -46,6 +46,37 @@ Music ┬─ Classical ┬─ Instrumental ┬─ Piano
                                 │      └─ Disco
                                 └─ Techno ┬─ Soft techno
                                           └─ Hard techno
+```
+
+Inspired by [tree](http://mama.indstate.edu/users/ice/tree/), a popular directory listing command, `tree.PrintHrn` prints the tree in similar style. Every node is printed on a separate line making the output tree look less cluttered and more elegant. It does take up vertical space though.
+
+```
+Music
+├─ Classical
+│  ├─ Instrumental
+│  │  ├─ Piano
+│  │  └─ Orchestra
+│  │     ├─ Light
+│  │     └─ Heavy
+│  └─ Vocal
+│     ├─ Opera
+│     │  ├─ Male
+│     │  └─ Female
+│     └─ Chorus
+└─ Pop/Rock
+   ├─ Organic
+   │  ├─ Rock
+   │  │  └─ Heavy metal
+   │  └─ Country
+   │     ├─ Dancing
+   │     └─ Soft
+   └─ Electronic
+      ├─ Pop
+      │  ├─ Late pop
+      │  └─ Disco
+      └─ Techno
+         ├─ Soft techno
+         └─ Hard techno
 ```
 
 ### Linked Lists
