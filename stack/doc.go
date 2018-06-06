@@ -37,7 +37,7 @@ Example:
 	// s := myStack{}
 	// s.push(11)
 	// s.push(12)
-	// stack.Print(&s) or stack.Sprint(&s)
+	// stack.Print(&s)
 
 */
 package stack
