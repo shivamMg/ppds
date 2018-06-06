@@ -48,6 +48,37 @@ Music ┬─ Classical ┬─ Instrumental ┬─ Piano
                                           └─ Hard techno
 ```
 
+Inspired by [tree](http://mama.indstate.edu/users/ice/tree/), a popular directory listing command, `tree.PrintHrn` prints the tree in similar style. Every node is printed on a separate line making the output tree look less cluttered and more elegant. It does take up vertical space though.
+
+```
+Music
+├─ Classical
+│  ├─ Instrumental
+│  │  ├─ Piano
+│  │  └─ Orchestra
+│  │     ├─ Light
+│  │     └─ Heavy
+│  └─ Vocal
+│     ├─ Opera
+│     │  ├─ Male
+│     │  └─ Female
+│     └─ Chorus
+└─ Pop/Rock
+   ├─ Organic
+   │  ├─ Rock
+   │  │  └─ Heavy metal
+   │  └─ Country
+   │     ├─ Dancing
+   │     └─ Soft
+   └─ Electronic
+      ├─ Pop
+      │  ├─ Late pop
+      │  └─ Disco
+      └─ Techno
+         ├─ Soft techno
+         └─ Hard techno
+```
+
 ### Linked Lists
 [![list](https://godoc.org/github.com/shivammg/ppds?status.svg)](https://godoc.org/github.com/shivamMg/ppds/list)
 

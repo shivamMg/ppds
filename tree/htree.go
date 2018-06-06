@@ -57,3 +57,37 @@ func lines(root Node) (s []string) {
 	}
 	return
 }
+
+// PrintHrn prints the horizontal-newline formatted tree to standard output.
+func PrintHrn(root Node) {
+	fmt.Print(SprintHrn(root))
+}
+
+// SprintHrn returns the horizontal-newline formatted tree.
+func SprintHrn(root Node) (s string) {
+	return strings.Join(lines2(root), "\n") + "\n"
+}
+
+func lines2(root Node) (s []string) {
+	s = append(s, root.Data())
+	l := len(root.Children())
+	if l == 0 {
+		return
+	}
+
+	for i, c := range root.Children() {
+		for j, line := range lines2(c) {
+			// first line of the last child
+			if i == l-1 && j == 0 {
+				s = append(s, BoxUpRight+BoxHor+" "+line)
+			} else if j == 0 {
+				s = append(s, BoxVerRight+BoxHor+" "+line)
+			} else if i == l-1 {
+				s = append(s, "   "+line)
+			} else {
+				s = append(s, BoxVer+"  "+line)
+			}
+		}
+	}
+	return
+}
