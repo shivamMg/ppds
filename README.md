@@ -140,5 +140,5 @@ type Queue interface {
 
 ## Contribute
 
-Any changes you would like to see? Please create an issue.
+Bug reports, PRs, feature requests, all are welcome.
 

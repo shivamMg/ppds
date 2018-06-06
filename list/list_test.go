@@ -12,11 +12,11 @@ type Node struct {
 	next *Node
 }
 
-func (n Node) Data() string {
+func (n *Node) Data() string {
 	return strconv.Itoa(n.data)
 }
 
-func (n Node) Next() list.Node {
+func (n *Node) Next() list.Node {
 	return n.next
 }
 
@@ -30,7 +30,7 @@ func TestPrint(t *testing.T) {
 │      1││     2││  3│
 └───────┘└──────┘└───┘
 `
-	got := list.Sprint(n3)
+	got := list.Sprint(&n3)
 	if want != got {
 		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}

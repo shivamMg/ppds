@@ -26,9 +26,7 @@ Example:
 
 	// n1, n2 := Node{data: "b"}, Node{data: "c"}
 	// n3 := Node{"a", []*Node{&n1, &n2}}
-	// tree.Print(&n3) or tree.Sprint(&n3)
-	// To pring horizontally:
-	// tree.PrintHr(&n3) or tree.SprintHr(&n3)
+	// tree.Print(&n3)
 
 */
 package tree

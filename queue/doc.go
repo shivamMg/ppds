@@ -36,7 +36,7 @@ Example:
 	// q := myQueue{}
 	// q.push(11)
 	// q.push(12)
-	// queue.Print(&q) or queue.Sprint(&q)
+	// queue.Print(&q)
 
 */
 package queue
