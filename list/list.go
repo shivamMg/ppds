@@ -20,8 +20,8 @@ const (
 
 // Node represents a linked list node.
 type Node interface {
-	// Data must return a string representing the value of node.
-	Data() string
+	// Data must return a value representing the node.
+	Data() interface{}
 	// Next must return a pointer to the next node. The last element
 	// of the list must return a nil pointer.
 	Next() Node
@@ -36,7 +36,7 @@ func Print(head Node) {
 func Sprint(head Node) (s string) {
 	data := []string{}
 	for reflect.ValueOf(head) != reflect.Zero(reflect.TypeOf(head)) {
-		data = append(data, head.Data())
+		data = append(data, fmt.Sprintf("%v", head.Data()))
 		head = head.Next()
 	}
 

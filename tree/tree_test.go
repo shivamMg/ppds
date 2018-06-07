@@ -11,7 +11,7 @@ type Node struct {
 	c    []*Node
 }
 
-func (n Node) Data() string {
+func (n Node) Data() interface{} {
 	return n.data
 }
 

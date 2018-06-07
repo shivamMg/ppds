@@ -11,7 +11,7 @@ Example:
 		next *Node
 	}
 
-	func (n *Node) Data() string {
+	func (n *Node) Data() interface{} {
 		return strconv.Itoa(n.data)
 	}
 

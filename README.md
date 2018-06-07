@@ -13,7 +13,7 @@ A type that satisfies the following interface can be printed using `tree.Print`.
 
 ```
 type Node interface {
-	Data() string
+	Data() interface{}
 	Children() []Node
 }
 ```
@@ -84,7 +84,7 @@ Music
 
 ```
 type Node interface {
-	Data() string
+	Data() interface{}
 	Next() Node
 }
 ```
