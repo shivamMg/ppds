@@ -2,7 +2,7 @@
 
 Pretty Print Data Structures
 
-Stacks, queues, trees and linked lists are data structures that one might find themselves working quite often with. This library lets you pretty print these with minumum effort. Certain assumptions can be made for each data structure. For instance, a stack or a queue will have methods synonymous to Push (insert) and Pop (remove), a tree node will have links to its child nodes, or a linked list node will have a link to its next adjacent node. This library utilises these assumptions, and exports interfaces and functions to pretty print them.
+Stacks, queues, trees and linked lists are data structures that you might find yourself working with quite often. This library lets you pretty print these with minimum effort. Certain assumptions can be made for each data structure, for instance, a stack or a queue will have methods synonymous to Push (insert) and Pop (remove), a tree node will have links to its child nodes, or a linked list node will have a link to its next adjacent node. This library utilises those assumptions, and exports interfaces and functions to pretty print them.
 
 The following data structures are supported:
 
