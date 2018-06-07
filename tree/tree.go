@@ -20,8 +20,8 @@ const (
 
 // Node represents a node in a tree.
 type Node interface {
-	// Data must return a string representing the value contained by the node.
-	Data() string
+	// Data must return a value representing the node.
+	Data() interface{}
 	// Children must return a list of all child nodes of the node.
 	Children() []Node
 }
@@ -95,9 +95,10 @@ func Sprint(root Node) string {
 			}
 
 			spaces := paddings[n] - covered
-			nodes += strings.Repeat(" ", spaces) + n.Data()
+			data := fmt.Sprintf("%v", n.Data())
+			nodes += strings.Repeat(" ", spaces) + data
 
-			w := utf8.RuneCountInString(n.Data())
+			w := utf8.RuneCountInString(data)
 			covered += spaces + w
 			current, next := isLeftMostChild(n), isLeftMostChild(q.peek())
 			if current {
@@ -161,7 +162,7 @@ func width(widths map[Node]int, n Node) int {
 		return w
 	}
 
-	w := utf8.RuneCountInString(n.Data()) + Gutter
+	w := utf8.RuneCountInString(fmt.Sprintf("%v", n.Data())) + Gutter
 	widths[n] = w
 	if len(n.Children()) == 0 {
 		return w

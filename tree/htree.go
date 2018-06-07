@@ -22,7 +22,7 @@ func SprintHr(root Node) (s string) {
 }
 
 func lines(root Node) (s []string) {
-	data := fmt.Sprintf("%s %s ", BoxHor, root.Data())
+	data := fmt.Sprintf("%s %v ", BoxHor, root.Data())
 	l := len(root.Children())
 	if l == 0 {
 		s = append(s, data)
@@ -69,7 +69,7 @@ func SprintHrn(root Node) (s string) {
 }
 
 func lines2(root Node) (s []string) {
-	s = append(s, root.Data())
+	s = append(s, fmt.Sprintf("%v", root.Data()))
 	l := len(root.Children())
 	if l == 0 {
 		return
