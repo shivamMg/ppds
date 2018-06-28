@@ -138,6 +138,10 @@ type Queue interface {
  └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘
 ```
 
+## Notes
+
+Printing Stacks and Queues requires defining Pop and Push methods. Internally these methods are used to get all elements - first by popping all elements then pushing them back in correct order. Use it with caution since the actual data structure is being modified when printing. After printing it'll be back to its original state. I've discussed why I decided to keep it this way in this [reddit thread](https://redd.it/8pbvrd). If there is no simultaneous read/write while printing, for instance from a different go routine, then you don't need to worry about it. Also, this caveat is only for Stacks and Queues.
+
 ## Contribute
 
 Bug reports, PRs, feature requests, all are welcome.
