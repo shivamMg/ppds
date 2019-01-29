@@ -12,7 +12,7 @@ if [ -n "${GOLINT}" ]; then
     exit 1
 fi
 
-GOVET=$(go tool vet . 2>&1)
+GOVET=$(go vet ./... 2>&1)
 if [ -n "${GOVET}" ]; then
     printf >&2 'go vet failed:\n%s\n' "${GOVET}"
     exit 1
