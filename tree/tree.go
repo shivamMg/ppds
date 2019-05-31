@@ -95,6 +95,10 @@ func Sprint(root Node) string {
 			}
 
 			spaces := paddings[n] - covered
+			// Should always have some spacing
+			if spaces < 0 {
+				spaces = 1
+			}
 			data := fmt.Sprintf("%v", n.Data())
 			nodes += strings.Repeat(" ", spaces) + data
 
