@@ -143,3 +143,21 @@ Piano  Orchestra     Opera         Chorus  Rock         Country        Pop      
 		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}
 }
+
+func TestSprintEmptyData(t *testing.T) {
+	n2, n4, n5 := Node{data: "node2"}, Node{data: "node4"}, Node{data: "node5"}
+	n3 := Node{data: "", c: []*Node{&n4}}
+	n1 := Node{"node1", []*Node{&n2, &n3, &n5}}
+
+	const want = `node1
+├──────┬──────┐
+node2         node5
+       │
+       node4
+`
+
+	got := tree.Sprint(&n1)
+	if got != want {
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
+	}
+}

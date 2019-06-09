@@ -14,13 +14,14 @@ const (
 	BoxDownRight = "┌"
 	BoxDownHor   = "┬"
 	BoxUpRight   = "└"
-	// Gutter is number of spaces between two adjacent child nodes
+	// Gutter is number of spaces between two adjacent child nodes.
 	Gutter = 2
 )
 
-// Node represents a node in a tree.
+// Node represents a node in a tree. Type that satisfies Node must be a hashable type.
 type Node interface {
-	// Data must return a value representing the node.
+	// Data must return a value representing the node. It is stringified using "%v".
+	// If empty, a space is used.
 	Data() interface{}
 	// Children must return a list of all child nodes of the node.
 	Children() []Node
@@ -95,7 +96,7 @@ func Sprint(root Node) string {
 			}
 
 			spaces := paddings[n] - covered
-			data := fmt.Sprintf("%v", n.Data())
+			data := safeData(n)
 			nodes += strings.Repeat(" ", spaces) + data
 
 			w := utf8.RuneCountInString(data)
@@ -135,6 +136,17 @@ func Sprint(root Node) string {
 	return s
 }
 
+// safeData always returns non-empty representation of n's data. Empty data
+// messes up tree structure, and ignoring such node will return incomplete
+// tree output (tree without an entire subtree). So it returns a space.
+func safeData(n Node) string {
+	data := fmt.Sprintf("%v", n.Data())
+	if data == "" {
+		return " "
+	}
+	return data
+}
+
 // setPaddings sets left padding (distance of a node from the root)
 // for each node in the tree.
 func setPaddings(paddings map[Node]int, widths map[Node]int, pad int, root Node) {
@@ -162,7 +174,7 @@ func width(widths map[Node]int, n Node) int {
 		return w
 	}
 
-	w := utf8.RuneCountInString(fmt.Sprintf("%v", n.Data())) + Gutter
+	w := utf8.RuneCountInString(safeData(n)) + Gutter
 	widths[n] = w
 	if len(n.Children()) == 0 {
 		return w
