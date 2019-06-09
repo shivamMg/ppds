@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"unicode/utf8"
@@ -17,6 +18,16 @@ const (
 	// Gutter is number of spaces between two adjacent child nodes.
 	Gutter = 2
 )
+
+// ErrDuplicateNode indicates that a duplicate Node (node with same hash) was
+// encountered while going through the tree. As of now Sprint/Print and
+// SprintWithError/PrintWithError cannot operate on such trees.
+//
+// This error is returned by SprintWithError/PrintWithError. It's also used
+// in Sprint/Print as error for panic for the same case.
+//
+// FIXME: create internal representation of trees that copies data
+var ErrDuplicateNode = errors.New("duplicate node")
 
 // Node represents a node in a tree. Type that satisfies Node must be a hashable type.
 type Node interface {
@@ -59,15 +70,40 @@ func (q *queue) peek() Node {
 	return q.arr[0]
 }
 
-// Print prints the formatted tree to standard output.
+// Print prints the formatted tree to standard output. To handle ErrDuplicateNode use PrintWithError.
 func Print(root Node) {
 	fmt.Print(Sprint(root))
 }
 
-// Sprint returns the formatted tree.
+// Sprint returns the formatted tree. To handle ErrDuplicateNode use SprintWithError.
 func Sprint(root Node) string {
 	parents := map[Node]Node{}
-	setParents(parents, root)
+	if err := setParents(parents, root); err != nil {
+		panic(err)
+	}
+	return sprint(parents, root)
+}
+
+// PrintWithError prints the formatted tree to standard output.
+func PrintWithError(root Node) error {
+	s, err := SprintWithError(root)
+	if err != nil {
+		return err
+	}
+	fmt.Print(s)
+	return nil
+}
+
+// SprintWithError returns the formatted tree.
+func SprintWithError(root Node) (string, error) {
+	parents := map[Node]Node{}
+	if err := setParents(parents, root); err != nil {
+		return "", err
+	}
+	return sprint(parents, root), nil
+}
+
+func sprint(parents map[Node]Node, root Node) string {
 	isLeftMostChild := func(n Node) bool {
 		p, ok := parents[n]
 		if !ok {
@@ -159,11 +195,17 @@ func setPaddings(paddings map[Node]int, widths map[Node]int, pad int, root Node)
 
 // setParents sets child-parent relationships for the tree rooted
 // at root.
-func setParents(parents map[Node]Node, root Node) {
+func setParents(parents map[Node]Node, root Node) error {
 	for _, c := range root.Children() {
+		if _, ok := parents[c]; ok {
+			return ErrDuplicateNode
+		}
 		parents[c] = root
-		setParents(parents, c)
+		if err := setParents(parents, c); err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 // width returns either the sum of widths of it's children or its own

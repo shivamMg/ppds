@@ -161,3 +161,21 @@ node2         node5
 		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", want, got)
 	}
 }
+
+func TestSprintAndSprintWithErrorDuplicateNode(t *testing.T) {
+	n2 := Node{data: "a"}
+	n1 := Node{data: "b", c: []*Node{&n2, &n2}}
+
+	_, err := tree.SprintWithError(&n1)
+	if err != tree.ErrDuplicateNode {
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\n", tree.ErrDuplicateNode, err)
+	}
+
+	defer func() {
+		r := recover()
+		if r != tree.ErrDuplicateNode {
+			t.Errorf("Expected:\n%s\n\nGot:\n%s\n", tree.ErrDuplicateNode, r)
+		}
+	}()
+	tree.Sprint(&n1)
+}
