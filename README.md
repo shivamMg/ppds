@@ -1,6 +1,6 @@
 # ppds [![godoc](https://godoc.org/github.com/shivammg/ppds?status.svg)](https://godoc.org/github.com/shivamMg/ppds) [![Build](https://travis-ci.com/shivamMg/ppds.svg?branch=master)](https://travis-ci.com/shivamMg/ppds) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Pretty Print Data Structures
+Pretty Print Data Structures!
 
 Stacks, queues, trees and linked lists are data structures that you might find yourself working with quite often. This library lets you pretty print these with minimum effort. Certain assumptions can be made for each data structure, for instance, a stack or a queue will have methods synonymous to Push (insert) and Pop (remove), a tree node will have links to its child nodes, or a linked list node will have a link to its next adjacent node. This library utilises those assumptions, and exports interfaces and functions to pretty print them.
 
