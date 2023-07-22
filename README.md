@@ -1,4 +1,4 @@
-# ppds [![godoc](https://godoc.org/github.com/shivammg/ppds?status.svg)](https://godoc.org/github.com/shivamMg/ppds) [![Build](https://travis-ci.com/shivamMg/ppds.svg?branch=master)](https://travis-ci.com/shivamMg/ppds) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# ppds [![godoc](https://godoc.org/github.com/shivammg/ppds?status.svg)](https://godoc.org/github.com/shivamMg/ppds) ![Build](https://github.com/shivamMg/trie/actions/workflows/ci.yml/badge.svg?branch=master) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Pretty Print Data Structures
 
