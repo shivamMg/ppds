@@ -23,30 +23,30 @@ func (n Node) Children() (children []tree.Node) {
 }
 
 func TestSprint(t *testing.T) {
-	n1 := Node{data: "Femdom"}
-	n2, n3, n16 := Node{"Dom&Sub", []*Node{&n1}}, Node{data: "Bondage"}, Node{data: "Masochism"}
-	n4 := Node{"BDSM", []*Node{&n2, &n3, &n16}}
-	n5, n6 := Node{data: "Age play"}, Node{data: "Furry"}
-	n7 := Node{"Role enactment", []*Node{&n5, &n6}}
-	n8 := Node{data: "Drugs"}
-	n9 := Node{"Fetish", []*Node{&n7, &n8, &n4}}
+	n1 := Node{data: "Color"}
+	n2, n3, n16 := Node{"Tom&Jer", []*Node{&n1}}, Node{data: "Cabbage"}, Node{data: "stoi_cism"}
+	n4 := Node{"boom", []*Node{&n2, &n3, &n16}}
+	n5, n6 := Node{data: "wage gap"}, Node{data: "Furry"}
+	n7 := Node{"pqrs enactment", []*Node{&n5, &n6}}
+	n8 := Node{data: "_rugs"}
+	n9 := Node{"abcdef", []*Node{&n7, &n8, &n4}}
 
 	n12 := Node{data: "Vintage"}
 	n11 := Node{"Classic", []*Node{&n12}}
 
-	n13, n14 := Node{data: "Gonewild"}, Node{data: "Public"}
-	n15 := Node{"Exhibition", []*Node{&n13, &n14}}
-	n10 := Node{"Pr0n", []*Node{&n11, &n9, &n15}}
+	n13, n14 := Node{data: "Private_"}, Node{data: "Public"}
+	n15 := Node{"class", []*Node{&n13, &n14}}
+	n10 := Node{"random", []*Node{&n11, &n9, &n15}}
 
-	const want = `Pr0n
+	const want = `random
 ├────────┬────────────────────────────────────────────────────┐
-Classic  Fetish                                               Exhibition
+Classic  abcdef                                               class
 │        ├────────────────┬──────┐                            ├─────────┐
-Vintage  Role enactment   Drugs  BDSM                         Gonewild  Public
+Vintage  pqrs enactment   _rugs  boom                         Private_  Public
          ├─────────┐             ├────────┬────────┐
-         Age play  Furry         Dom&Sub  Bondage  Masochism
+         wage gap  Furry         Tom&Jer  Cabbage  stoi_cism
                                  │
-                                 Femdom
+                                 Color
 `
 
 	got := tree.Sprint(&n10)
