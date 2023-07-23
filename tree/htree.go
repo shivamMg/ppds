@@ -29,7 +29,7 @@ func lines(root Node) (s []string) {
 		return
 	}
 
-	w := utf8.RuneCountInString(data)
+	w := runeCountInStringExcludingShellEscapeSequences(data)
 	for i, c := range root.Children() {
 		for j, line := range lines(c) {
 			if i == 0 && j == 0 {
@@ -54,6 +54,28 @@ func lines(root Node) (s []string) {
 			}
 			s = append(s, strings.Repeat(" ", w)+box+line)
 		}
+	}
+	return
+}
+
+// runeCountInStringExcludingShellEscapeSequences is like utf8.RuneCountInString
+// but it ignores shell escape sequences.
+func runeCountInStringExcludingShellEscapeSequences(s string) (n int) {
+	for len(s) > 0 {
+		r, size := utf8.DecodeRuneInString(s)
+		if r == '\033' {
+			// skip shell escape sequences
+			for {
+				r, size = utf8.DecodeRuneInString(s)
+				if r == 'm' {
+					break
+				}
+				s = s[size:]
+			}
+		} else {
+			n++
+		}
+		s = s[size:]
 	}
 	return
 }
